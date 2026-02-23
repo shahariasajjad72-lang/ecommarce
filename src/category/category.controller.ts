@@ -35,7 +35,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('Categories')
-// @ApiBearerAuth('access-token')
+@ApiBearerAuth('access-token')
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -122,7 +122,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get('level/:level')
   getCategoriesByLevel(
     @Param('level', ParseIntPipe) level: number,
@@ -178,7 +178,7 @@ export class CategoryController {
     status: 409,
     description: 'Slug already exists',
   })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Post('add-to-level')
   addCategoryToLevel(
     @Body() dto: AddCategoryToLevelDto,
@@ -214,7 +214,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get('level-stats')
   getLevelStatistics() {
     return this.categoryService.getLevelStatistics();
@@ -246,7 +246,7 @@ export class CategoryController {
     status: 409,
     description: 'Slug already exists',
   })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Post()
   create(
     @Body() createCategoryDto: CreateCategoryDto,
@@ -269,7 +269,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get()
   findAll(@Query() filters: CategoryFilterDto) {
     return this.categoryService.findAll(filters);
@@ -289,7 +289,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get('tree')
   getTree() {
     return this.categoryService.getTree();
@@ -318,7 +318,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
@@ -347,7 +347,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get('slug/:slug')
   findBySlug(@Param('slug') slug: string) {
     return this.categoryService.findBySlug(slug);
@@ -376,7 +376,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id/children')
   getChildren(@Param('id') id: string) {
     return this.categoryService.getChildren(id);
@@ -405,7 +405,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing VIEW_PRODUCTS permission',
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id/breadcrumb')
   getBreadcrumb(@Param('id') id: string) {
     return this.categoryService.getBreadcrumb(id);
@@ -438,7 +438,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing MANAGE_PRODUCTS permission',
   })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -474,7 +474,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing MANAGE_PRODUCTS permission',
   })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
@@ -507,7 +507,7 @@ export class CategoryController {
     status: 403,
     description: 'Missing MANAGE_PRODUCTS permission',
   })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id/restore')
   restore(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
     return this.categoryService.restore(id, user.id);

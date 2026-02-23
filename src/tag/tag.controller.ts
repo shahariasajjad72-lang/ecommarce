@@ -24,7 +24,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('tags')
-// @ApiBearerAuth('access-token')
+@ApiBearerAuth('access-token')
 @Controller('tags')
 export class TagController {
   constructor(private readonly TagService: TagService) {}
@@ -60,7 +60,7 @@ export class TagController {
     description: 'Missing MANAGE_PRODUCTS permission',
   })
   @ApiResponse({ status: 409, description: 'tag name or slug already exists' })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Post()
   create(@Body() dto: CreateTagDto, @CurrentUser() user: AuthenticatedUser) {
     return this.TagService.create(dto, user.id);
@@ -101,7 +101,7 @@ export class TagController {
       },
     },
   })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get()
   findAll() {
     return this.TagService.findAll();
@@ -121,7 +121,7 @@ export class TagController {
     description: 'tag retrieved successfully',
   })
   @ApiResponse({ status: 404, description: 'tag not found' })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.TagService.findById(id);
@@ -142,7 +142,7 @@ export class TagController {
     description: 'tag retrieved successfully',
   })
   @ApiResponse({ status: 404, description: 'tag not found' })
-  // @Permissions(Permission.VIEW_PRODUCTS)
+  @Permissions(Permission.VIEW_PRODUCTS)
   @Get('slug/:slug')
   findBySlug(@Param('slug') slug: string) {
     return this.TagService.findBySlug(slug);
@@ -164,7 +164,7 @@ export class TagController {
   })
   @ApiResponse({ status: 404, description: 'tag not found' })
   @ApiResponse({ status: 409, description: 'tag name or slug already exists' })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -189,7 +189,7 @@ export class TagController {
     description: 'tag deleted successfully',
   })
   @ApiResponse({ status: 404, description: 'tag not found' })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   delete(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
@@ -211,7 +211,7 @@ export class TagController {
     description: 'tag restored successfully',
   })
   @ApiResponse({ status: 404, description: 'Deleted tag not found' })
-  // @Permissions(Permission.MANAGE_PRODUCTS)
+  @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id/restore')
   restore(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
     return this.TagService.restore(id, user.id);
