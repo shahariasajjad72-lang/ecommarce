@@ -24,7 +24,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('tags')
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 @Controller('tags')
 export class TagController {
   constructor(private readonly TagService: TagService) {}

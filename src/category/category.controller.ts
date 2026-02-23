@@ -35,7 +35,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('Categories')
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}

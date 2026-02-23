@@ -36,7 +36,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('Attributes')
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 @Controller('attributes')
 export class AttributeController {
   constructor(private readonly attributeService: AttributeService) {}

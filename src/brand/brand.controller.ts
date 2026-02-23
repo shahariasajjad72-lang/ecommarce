@@ -37,7 +37,7 @@ import { Permissions } from '../common/decorators/permissions.decorator';
 import type { AuthenticatedUser } from '../common/interfaces';
 
 @ApiTags('Brands')
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 @Controller('brands')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}
