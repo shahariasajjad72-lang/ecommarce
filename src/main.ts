@@ -25,10 +25,16 @@ async function bootstrap() {
   // ----------------------------------
   app.use(helmet());
 
+  // app.enableCors({
+  //   // origin: nodeEnv === 'production' ? ['https://yourfrontend.com'] : true,
+  //   origin:  "*" : true, // Allow all origins for development; adjust in production
+  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  //   credentials: true,
+  //   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  // });
   app.enableCors({
-    origin: nodeEnv === 'production' ? ['https://yourfrontend.com'] : true,
+    origin: '*', // allow all origins
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
