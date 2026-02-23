@@ -1,5 +1,5 @@
 /**
- * MAIN.TS - Application Entry Point (Swagger Enabled)
+ * MAIN.TS - Application Entry Point (Production Ready)
  */
 
 import { NestFactory } from '@nestjs/core';
@@ -21,30 +21,30 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   // ----------------------------------
-  // Security & CORS
+  // SECURITY (Helmet Fixed)
   // ----------------------------------
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false, // 🔥 IMPORTANT for CORS
+    }),
+  );
 
-  // app.enableCors({
-  //   // origin: nodeEnv === 'production' ? ['https://yourfrontend.com'] : true,
-  //   origin:  "*" : true, // Allow all origins for development; adjust in production
-  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  //   credentials: true,
-  //   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  // });
+  // ----------------------------------
+  // CORS CONFIGURATION (FIXED)
+  // ----------------------------------
   app.enableCors({
-    origin: '*', // allow all origins
+    origin: '*', // allow all origins (public API)
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
   // ----------------------------------
-  // Global Prefix
+  // GLOBAL PREFIX
   // ----------------------------------
   app.setGlobalPrefix('api/v1');
 
   // ----------------------------------
-  // Global Validation Pipe
+  // GLOBAL VALIDATION PIPE
   // ----------------------------------
   app.useGlobalPipes(
     new ValidationPipe({
@@ -59,7 +59,7 @@ async function bootstrap() {
   );
 
   // ----------------------------------
-  // Swagger Setup (DEV ONLY) - FIXED
+  // SWAGGER (Enable in Production or via ENV)
   // ----------------------------------
   const enableSwagger =
     nodeEnv === 'production' || process.env.ENABLE_SWAGGER === 'true';
@@ -88,38 +88,13 @@ async function bootstrap() {
   }
 
   // ----------------------------------
-  // Start Server
+  // START SERVER
   // ----------------------------------
   await app.listen(port);
 
-  logger.log(`🚀 Application running on: http://localhost:${port}/api/v1`);
+  logger.log(`🚀 Application running on port: ${port}`);
   logger.log(`🌍 Environment: ${nodeEnv}`);
-  logger.log(`🔐 Auth endpoints: http://localhost:${port}/api/v1/auth`);
-
-  if (nodeEnv === 'production') {
-    logger.log('');
-    logger.log('📌 Available Auth Endpoints:');
-    logger.log('   POST   /api/v1/auth/admin/login');
-    logger.log('   POST   /api/v1/auth/admin/create');
-    logger.log('   GET    /api/v1/auth/admin/list');
-    logger.log('   PATCH  /api/v1/auth/admin/:id/permissions');
-    logger.log('   PATCH  /api/v1/auth/admin/:id/disable');
-    logger.log('   PATCH  /api/v1/auth/admin/:id/enable');
-    logger.log('   DELETE /api/v1/auth/admin/:id');
-    logger.log('   POST   /api/v1/auth/customer/register');
-    logger.log('   POST   /api/v1/auth/customer/login');
-    logger.log('   POST   /api/v1/auth/refresh');
-    logger.log('   POST   /api/v1/auth/logout');
-    logger.log('   POST   /api/v1/auth/logout-all');
-    logger.log('   GET    /api/v1/auth/me');
-    logger.log('');
-    logger.log('🔑 How to use Swagger:');
-    logger.log('   1. Login via /api/v1/auth/admin/login');
-    logger.log('   2. Copy the accessToken from response');
-    logger.log('   3. Click "Authorize" button (top right)');
-    logger.log('   4. Paste token WITHOUT "Bearer " prefix');
-    logger.log('   5. Click "Authorize" then "Close"');
-  }
+  logger.log(`📡 API Base: /api/v1`);
 }
 
 bootstrap();
