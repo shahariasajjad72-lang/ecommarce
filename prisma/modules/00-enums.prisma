@@ -1,0 +1,47 @@
+enum AuthUserType {
+  ADMIN
+  CUSTOMER
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+}
+
+enum Permission {
+  // User Management
+  MANAGE_USERS
+  VIEW_USERS
+
+  // Product Management
+  MANAGE_PRODUCTS
+  VIEW_PRODUCTS
+
+  // Order Management
+  MANAGE_ORDERS
+  VIEW_ORDERS
+
+  // Payment Management
+  MANAGE_PAYMENTS
+  VIEW_PAYMENTS
+
+  // Reports
+  VIEW_REPORTS
+  EXPORT_DATA
+
+  // Settings
+  MANAGE_SETTINGS
+}
+
+enum OtpChannel {
+  EMAIL
+  SMS
+}
+
+enum OtpPurpose {
+  VERIFY_EMAIL
+  VERIFY_PHONE
+  RESET_PASSWORD
+  TWO_FACTOR_AUTH
+  LOGIN_OTP
+}

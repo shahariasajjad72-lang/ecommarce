@@ -1,0 +1,27 @@
+model VerificationOtp {
+  id          String      @id @default(cuid())
+
+  channel     OtpChannel
+  purpose     OtpPurpose
+
+  target      String      @db.VarChar(255)
+
+  codeHash    String      @db.VarChar(255)
+  expiresAt   DateTime
+
+  attempts    Int         @default(0)
+  maxAttempts Int         @default(5)
+
+  verified    Boolean     @default(false)
+  verifiedAt  DateTime?
+
+  ipAddress   String?     @db.VarChar(45)
+  userAgent   String?     @db.Text
+
+  createdAt   DateTime    @default(now())
+
+  @@index([target])
+  @@index([channel, purpose])
+  @@index([expiresAt])
+  @@map("verification_otp")
+}

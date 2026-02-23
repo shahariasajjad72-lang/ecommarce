@@ -1,0 +1,31 @@
+model Admin {
+  id            String        @id @default(cuid())
+
+  firstName     String        @db.VarChar(50)
+  lastName      String        @db.VarChar(50)
+  email         String        @unique @db.VarChar(255)
+  phone         String?        @db.VarChar(20)
+  avatar        String?
+
+  password      String
+
+  role          Role          @default(ADMIN)
+  permissions   Permission[]  @default([])
+
+  tokens        AuthToken[]
+
+  isActive      Boolean       @default(true)
+  isDeleted     Boolean       @default(false)
+  deletedAt     DateTime?
+  lastLoginAt   DateTime?
+  lastLoginIp   String?       @db.VarChar(45)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  createdBy     String?
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive, isDeleted])
+  @@map("admins")
+}

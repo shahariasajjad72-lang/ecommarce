@@ -1,0 +1,45 @@
+model Image {
+  id            String    @id @default(cuid())
+
+  // Original file info
+  originalName  String    @db.VarChar(255) @map("original_name")
+
+  // Stored file info
+  filename      String    @db.VarChar(255)
+  path          String    @db.VarChar(500)
+  url           String    @db.Text
+
+  // Image metadata
+  mimetype      String    @db.VarChar(100)
+  size          Int                           // bytes
+  width         Int?
+  height        Int?
+
+  // Thumbnail
+  thumbnailUrl  String?   @db.Text @map("thumbnail_url")
+
+  // Folder organization (for cPanel/server)
+  folder        String    @db.VarChar(100) @default("general")   // product, profile, category, brand, tag
+
+  // Sort order (for galleries/multiple images)
+  sortOrder     Int       @default(0) @map("sort_order")
+
+  // Alt text for SEO
+  alt           String?   @db.VarChar(255)
+
+  // Status
+  isActive      Boolean   @default(true) @map("is_active")
+  isDeleted     Boolean   @default(false) @map("is_deleted")
+  deletedAt     DateTime? @map("deleted_at")
+
+  // Audit
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  createdBy     String?   @map("created_by")
+
+  @@index([folder])
+  @@index([isActive, isDeleted])
+  @@index([sortOrder])
+  @@index([createdAt])
+  @@map("images")
+}

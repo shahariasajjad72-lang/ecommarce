@@ -1,0 +1,33 @@
+model Category {
+  id String @id @default(cuid())
+  name String @db.VarChar(100)
+  slug String @unique @db.VarChar(100)
+  parentId String? @map("parent_id")
+  parent Category? @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Restrict)
+  children Category[] @relation("CategoryToCategory")
+  path String @db.VarChar(500)
+  level Int @default(0)
+  isLeaf Boolean @default(true) @map("is_leaf")
+  description String? @db.Text
+  image String? @db.VarChar(500)
+  icon String? @db.VarChar(100)
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @db.VarChar(50) @map("created_by")
+  updatedBy String? @db.VarChar(50) @map("updated_by")
+
+  @@index([isActive, isDeleted])
+  @@index([parentId])
+  @@index([slug])
+  @@index([path])
+  @@index([level])
+  @@index([sortOrder])
+  @@index([isActive])
+  @@map("categories")
+}

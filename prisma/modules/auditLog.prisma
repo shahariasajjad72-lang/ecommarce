@@ -1,0 +1,22 @@
+model AuditLog {
+  id          String   @id @default(cuid())
+
+  actorRole   Role
+  actorId     String?
+
+  action      String
+  model       String
+  recordId   String?
+
+  oldData     Json?
+  newData     Json?
+
+  ipAddress   String?
+  userAgent   String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([actorRole])
+  @@index([actorId])
+  @@index([model])
+}

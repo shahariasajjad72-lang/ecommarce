@@ -1,0 +1,37 @@
+model Customer {
+  id              String    @id @default(cuid())
+
+  firstName       String?    @db.VarChar(50)
+  lastName        String?   @db.VarChar(50)
+
+  email           String?    @unique @db.VarChar(255)
+  emailVerified   Boolean   @default(false)
+  phone           String    @unique @db.VarChar(20)
+  phoneVerified   Boolean   @default(false)
+
+  password        String?
+
+  avatar          String?
+  dateOfBirth     DateTime?
+  gender          String?   @db.VarChar(20)
+
+  addresses       Json      @default("[]")
+
+  tokens          AuthToken[]
+
+  isGuest         Boolean   @default(true)
+  isActive        Boolean   @default(true)
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+
+  lastLoginAt     DateTime?
+  lastLoginIp     String?   @db.VarChar(45)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([isActive, isDeleted])
+  @@map("customers")
+}

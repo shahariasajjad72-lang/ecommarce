@@ -1,0 +1,26 @@
+model Brand {
+  id String @id @default(cuid())
+
+  name String @unique @db.VarChar(100)
+  slug String @unique @db.VarChar(150)
+  logo String? @db.Text
+  description String? @db.Text
+
+  metaTitle String? @db.VarChar(255) @map("meta_title")
+  metaDescription String? @db.Text @map("meta_description")
+
+  isActive Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("delete_at")
+
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @map("create_by")
+  updatedBy String? @map("updated_by")
+
+  @@index([slug])
+  @@index([isActive, isDeleted])
+  @@index([name])
+  @@map("brands")
+
+}

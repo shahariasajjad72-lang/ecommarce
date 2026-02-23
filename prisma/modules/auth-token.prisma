@@ -1,0 +1,32 @@
+model AuthToken {
+  id            String       @id @default(cuid())
+
+  userType      AuthUserType
+
+  adminId       String?
+  admin         Admin?       @relation(fields: [adminId], references: [id], onDelete: Restrict)
+
+  customerId    String?
+  customer      Customer?    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  tokenHash     String       @db.VarChar(255)
+  expiresAt     DateTime
+
+  revoked       Boolean      @default(false)
+  revokedAt     DateTime?
+  revokedReason String?      @db.VarChar(100)
+
+  deviceInfo    String?      @db.VarChar(255)
+  ipAddress     String?      @db.VarChar(45)
+  userAgent     String?      @db.Text
+
+  createdAt     DateTime     @default(now())
+
+  @@index([tokenHash])
+  @@index([userType])
+  @@index([adminId])
+  @@index([customerId])
+  @@index([expiresAt])
+  @@index([revoked])
+  @@map("auth_tokens")
+}

@@ -1,0 +1,493 @@
+// ========================================
+// AUTO-GENERATED FILE — DO NOT EDIT
+// Run: npm run prisma:build
+// ========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// ========================================
+// MODULE:  00-ENUMS.PRISMA
+// ========================================
+
+enum AuthUserType {
+  ADMIN
+  CUSTOMER
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+}
+
+enum Permission {
+  // User Management
+  MANAGE_USERS
+  VIEW_USERS
+
+  // Product Management
+  MANAGE_PRODUCTS
+  VIEW_PRODUCTS
+
+  // Order Management
+  MANAGE_ORDERS
+  VIEW_ORDERS
+
+  // Payment Management
+  MANAGE_PAYMENTS
+  VIEW_PAYMENTS
+
+  // Reports
+  VIEW_REPORTS
+  EXPORT_DATA
+
+  // Settings
+  MANAGE_SETTINGS
+}
+
+enum OtpChannel {
+  EMAIL
+  SMS
+}
+
+enum OtpPurpose {
+  VERIFY_EMAIL
+  VERIFY_PHONE
+  RESET_PASSWORD
+  TWO_FACTOR_AUTH
+  LOGIN_OTP
+}
+
+
+// ========================================
+// MODULE:  ATTRIBUTEVALUE.PRISMA
+// ========================================
+
+model AttributeValue {
+  id          String   @id @default(cuid())
+
+  value       String   @db.VarChar(255)
+
+  attributeId String   @map("attribute_id")
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Restrict)
+
+  sortOrder   Int      @default(0) @map("sort_order")
+
+  isActive    Boolean  @default(true) @map("is_active")
+  isDeleted   Boolean  @default(false) @map("is_deleted")
+  deletedAt   DateTime? @map("deleted_at")
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdBy   String?  @map("created_by")
+  updatedBy   String?  @map("updated_by")
+
+  @@index([attributeId])
+  @@index([isActive, isDeleted])
+  @@index([sortOrder])
+  @@map("attribute_values")
+}
+
+
+// ========================================
+// MODULE:  ADMIN.PRISMA
+// ========================================
+
+model Admin {
+  id            String        @id @default(cuid())
+
+  firstName     String        @db.VarChar(50)
+  lastName      String        @db.VarChar(50)
+  email         String        @unique @db.VarChar(255)
+  phone         String?        @db.VarChar(20)
+  avatar        String?
+
+  password      String
+
+  role          Role          @default(ADMIN)
+  permissions   Permission[]  @default([])
+
+  tokens        AuthToken[]
+
+  isActive      Boolean       @default(true)
+  isDeleted     Boolean       @default(false)
+  deletedAt     DateTime?
+  lastLoginAt   DateTime?
+  lastLoginIp   String?       @db.VarChar(45)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  createdBy     String?
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive, isDeleted])
+  @@map("admins")
+}
+
+
+// ========================================
+// MODULE:  ATTRIBUTE-SET.PRISMA
+// ========================================
+
+model AttributeSet {
+  id  String @id @default(cuid())
+
+  name String @db.VarChar(100)
+  slug String @db.VarChar(150) @unique
+  attributes Attribute[]
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive  Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @db.VarChar(50) @map("created_by")
+  updatedBy String? @db.VarChar(50) @map("updated_by")
+
+  @@index([slug])
+  @@index([isActive, isDeleted])
+  @@index([sortOrder])
+  @@map("attribute_sets")
+}
+
+
+// ========================================
+// MODULE:  ATTRIBUTE.PRISMA
+// ========================================
+
+model Attribute {
+  id  String @id @default(cuid())
+
+  name String @db.VarChar(100)
+  slug String @db.VarChar(150) @unique
+
+  attributeSetId String @map("attribute_set_id")
+  attributeSet  AttributeSet @relation(fields: [attributeSetId], references: [id], onDelete: Restrict)
+
+  values AttributeValue[]
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive  Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @db.VarChar(50) @map("created_by")
+  updatedBy String? @db.VarChar(50) @map("updated_by")
+
+  @@unique([attributeSetId, slug])
+  @@index([attributeSetId])
+  @@index([slug])
+  @@index([isActive, isDeleted])
+  @@index([sortOrder])
+  @@map("attributes")
+}
+
+
+// ========================================
+// MODULE:  AUDITLOG.PRISMA
+// ========================================
+
+model AuditLog {
+  id          String   @id @default(cuid())
+
+  actorRole   Role
+  actorId     String?
+
+  action      String
+  model       String
+  recordId   String?
+
+  oldData     Json?
+  newData     Json?
+
+  ipAddress   String?
+  userAgent   String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([actorRole])
+  @@index([actorId])
+  @@index([model])
+}
+
+
+// ========================================
+// MODULE:  AUTH-TOKEN.PRISMA
+// ========================================
+
+model AuthToken {
+  id            String       @id @default(cuid())
+
+  userType      AuthUserType
+
+  adminId       String?
+  admin         Admin?       @relation(fields: [adminId], references: [id], onDelete: Restrict)
+
+  customerId    String?
+  customer      Customer?    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  tokenHash     String       @db.VarChar(255)
+  expiresAt     DateTime
+
+  revoked       Boolean      @default(false)
+  revokedAt     DateTime?
+  revokedReason String?      @db.VarChar(100)
+
+  deviceInfo    String?      @db.VarChar(255)
+  ipAddress     String?      @db.VarChar(45)
+  userAgent     String?      @db.Text
+
+  createdAt     DateTime     @default(now())
+
+  @@index([tokenHash])
+  @@index([userType])
+  @@index([adminId])
+  @@index([customerId])
+  @@index([expiresAt])
+  @@index([revoked])
+  @@map("auth_tokens")
+}
+
+
+// ========================================
+// MODULE:  BRAND.PRISMA
+// ========================================
+
+model Brand {
+  id String @id @default(cuid())
+
+  name String @unique @db.VarChar(100)
+  slug String @unique @db.VarChar(150)
+  logo String? @db.Text
+  description String? @db.Text
+
+  metaTitle String? @db.VarChar(255) @map("meta_title")
+  metaDescription String? @db.Text @map("meta_description")
+
+  isActive Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("delete_at")
+
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @map("create_by")
+  updatedBy String? @map("updated_by")
+
+  @@index([slug])
+  @@index([isActive, isDeleted])
+  @@index([name])
+  @@map("brands")
+
+}
+
+
+// ========================================
+// MODULE:  CATEGORY.PRISMA
+// ========================================
+
+model Category {
+  id String @id @default(cuid())
+  name String @db.VarChar(100)
+  slug String @unique @db.VarChar(100)
+  parentId String? @map("parent_id")
+  parent Category? @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Restrict)
+  children Category[] @relation("CategoryToCategory")
+  path String @db.VarChar(500)
+  level Int @default(0)
+  isLeaf Boolean @default(true) @map("is_leaf")
+  description String? @db.Text
+  image String? @db.VarChar(500)
+  icon String? @db.VarChar(100)
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+  isDeleted Boolean @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String? @db.VarChar(50) @map("created_by")
+  updatedBy String? @db.VarChar(50) @map("updated_by")
+
+  @@index([isActive, isDeleted])
+  @@index([parentId])
+  @@index([slug])
+  @@index([path])
+  @@index([level])
+  @@index([sortOrder])
+  @@index([isActive])
+  @@map("categories")
+}
+
+
+// ========================================
+// MODULE:  CUSTOMER.PRISMA
+// ========================================
+
+model Customer {
+  id              String    @id @default(cuid())
+
+  firstName       String?    @db.VarChar(50)
+  lastName        String?   @db.VarChar(50)
+
+  email           String?    @unique @db.VarChar(255)
+  emailVerified   Boolean   @default(false)
+  phone           String    @unique @db.VarChar(20)
+  phoneVerified   Boolean   @default(false)
+
+  password        String?
+
+  avatar          String?
+  dateOfBirth     DateTime?
+  gender          String?   @db.VarChar(20)
+
+  addresses       Json      @default("[]")
+
+  tokens          AuthToken[]
+
+  isGuest         Boolean   @default(true)
+  isActive        Boolean   @default(true)
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+
+  lastLoginAt     DateTime?
+  lastLoginIp     String?   @db.VarChar(45)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([isActive, isDeleted])
+  @@map("customers")
+}
+
+
+// ========================================
+// MODULE:  IMAGE.PRISMA
+// ========================================
+
+model Image {
+  id            String    @id @default(cuid())
+
+  // Original file info
+  originalName  String    @db.VarChar(255) @map("original_name")
+
+  // Stored file info
+  filename      String    @db.VarChar(255)
+  path          String    @db.VarChar(500)
+  url           String    @db.Text
+
+  // Image metadata
+  mimetype      String    @db.VarChar(100)
+  size          Int                           // bytes
+  width         Int?
+  height        Int?
+
+  // Thumbnail
+  thumbnailUrl  String?   @db.Text @map("thumbnail_url")
+
+  // Folder organization (for cPanel/server)
+  folder        String    @db.VarChar(100) @default("general")   // product, profile, category, brand, tag
+
+  // Sort order (for galleries/multiple images)
+  sortOrder     Int       @default(0) @map("sort_order")
+
+  // Alt text for SEO
+  alt           String?   @db.VarChar(255)
+
+  // Status
+  isActive      Boolean   @default(true) @map("is_active")
+  isDeleted     Boolean   @default(false) @map("is_deleted")
+  deletedAt     DateTime? @map("deleted_at")
+
+  // Audit
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  createdBy     String?   @map("created_by")
+
+  @@index([folder])
+  @@index([isActive, isDeleted])
+  @@index([sortOrder])
+  @@index([createdAt])
+  @@map("images")
+}
+
+
+// ========================================
+// MODULE:  TAGS.PRISMA
+// ========================================
+
+model Tag {
+  id          String    @id @default(cuid())
+
+  name        String    @unique @db.VarChar(100)
+  slug        String    @unique @db.VarChar(150)
+  logo        String?   @db.Text
+  description String?   @db.Text
+
+  // SEO Fields
+  metaTitle       String? @db.VarChar(255) @map("meta_title")
+  metaDescription String? @db.Text @map("meta_description")
+
+  // Status
+  isActive    Boolean   @default(true) @map("is_active")
+  isDeleted   Boolean   @default(false) @map("is_deleted")
+  deletedAt   DateTime? @map("deleted_at")
+
+  // Audit
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdBy   String?   @map("created_by")
+  updatedBy   String?   @map("updated_by")
+
+  @@index([slug])
+  @@index([isActive, isDeleted])
+  @@index([name])
+  @@map("tags")
+}
+
+
+// ========================================
+// MODULE:  VERIFICATION-OTP.PRISMA
+// ========================================
+
+model VerificationOtp {
+  id          String      @id @default(cuid())
+
+  channel     OtpChannel
+  purpose     OtpPurpose
+
+  target      String      @db.VarChar(255)
+
+  codeHash    String      @db.VarChar(255)
+  expiresAt   DateTime
+
+  attempts    Int         @default(0)
+  maxAttempts Int         @default(5)
+
+  verified    Boolean     @default(false)
+  verifiedAt  DateTime?
+
+  ipAddress   String?     @db.VarChar(45)
+  userAgent   String?     @db.Text
+
+  createdAt   DateTime    @default(now())
+
+  @@index([target])
+  @@index([channel, purpose])
+  @@index([expiresAt])
+  @@map("verification_otp")
+}
