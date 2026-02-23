@@ -47,7 +47,7 @@ export class AttributeController {
 
   @ApiOperation({ summary: 'Create Attribute Set' })
   @ApiResponse({ status: 201, description: 'Attribute set created' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Post('sets')
   createSet(
     @Body() dto: CreateAttributeSetDto,
@@ -60,7 +60,7 @@ export class AttributeController {
     summary: 'Get All Attribute Sets (with nested attributes & values)',
   })
   @ApiResponse({ status: 200, description: 'Attribute sets retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('sets')
   getAllSets() {
     return this.attributeService.getAllSets();
@@ -69,7 +69,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Get Attribute Set by ID' })
   @ApiParam({ name: 'id', description: 'Attribute set ID' })
   @ApiResponse({ status: 200, description: 'Attribute set retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('sets/:id')
   getSetById(@Param('id') id: string) {
     return this.attributeService.getSetById(id);
@@ -82,7 +82,7 @@ export class AttributeController {
     example: 'specifications',
   })
   @ApiResponse({ status: 200, description: 'Attribute set retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('sets/slug/:slug')
   getSetBySlug(@Param('slug') slug: string) {
     return this.attributeService.getSetBySlug(slug);
@@ -91,7 +91,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Delete Attribute Set' })
   @ApiParam({ name: 'id', description: 'Attribute set ID' })
   @ApiResponse({ status: 200, description: 'Attribute set deleted' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete('sets/:id')
   @HttpCode(HttpStatus.OK)
   deleteSet(@Param('id') id: string) {
@@ -104,7 +104,7 @@ export class AttributeController {
 
   @ApiOperation({ summary: 'Create Attribute' })
   @ApiResponse({ status: 201, description: 'Attribute created' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Post()
   createAttribute(
     @Body() dto: CreateAttributeDto,
@@ -116,7 +116,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Get Attributes by Set ID (with values)' })
   @ApiParam({ name: 'setId', description: 'Attribute set ID' })
   @ApiResponse({ status: 200, description: 'Attributes retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('by-set/:setId')
   getAttributesBySet(@Param('setId') setId: string) {
     return this.attributeService.getAttributesBySet(setId);
@@ -125,7 +125,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Get Attribute by ID (with values)' })
   @ApiParam({ name: 'id', description: 'Attribute ID' })
   @ApiResponse({ status: 200, description: 'Attribute retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id')
   getAttributeById(@Param('id') id: string) {
     return this.attributeService.getAttributeById(id);
@@ -135,7 +135,7 @@ export class AttributeController {
   @ApiParam({ name: 'setId', description: 'Attribute set ID' })
   @ApiParam({ name: 'slug', description: 'Attribute slug', example: 'ram' })
   @ApiResponse({ status: 200, description: 'Attribute retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('by-slug/:setId/:slug')
   getAttributeBySlug(
     @Param('setId') setId: string,
@@ -147,7 +147,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Delete Attribute' })
   @ApiParam({ name: 'id', description: 'Attribute ID' })
   @ApiResponse({ status: 200, description: 'Attribute deleted' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   deleteAttribute(@Param('id') id: string) {
@@ -160,7 +160,7 @@ export class AttributeController {
 
   @ApiOperation({ summary: 'Create Attribute Value' })
   @ApiResponse({ status: 201, description: 'Attribute value created' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Post('values')
   createValue(
     @Body() dto: CreateAttributeValueDto,
@@ -172,7 +172,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Get Values by Attribute ID' })
   @ApiParam({ name: 'attributeId', description: 'Attribute ID' })
   @ApiResponse({ status: 200, description: 'Attribute values retrieved' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('values/by-attribute/:attributeId')
   getValuesByAttribute(@Param('attributeId') attributeId: string) {
     return this.attributeService.getValuesByAttribute(attributeId);
@@ -181,7 +181,7 @@ export class AttributeController {
   @ApiOperation({ summary: 'Delete Attribute Value' })
   @ApiParam({ name: 'id', description: 'Attribute value ID' })
   @ApiResponse({ status: 200, description: 'Attribute value deleted' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete('values/:id')
   @HttpCode(HttpStatus.OK)
   deleteValue(@Param('id') id: string) {

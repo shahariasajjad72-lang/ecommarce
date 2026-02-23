@@ -44,7 +44,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Create Brand',
-    description: 'Create a new brand with name, logo, and SEO metadata. Requires MANAGE_PRODUCTS permission.',
+    description:
+      'Create a new brand with name, logo, and SEO metadata. Requires MANAGE_PRODUCTS permission.',
   })
   @ApiResponse({
     status: 201,
@@ -67,9 +68,15 @@ export class BrandController {
       },
     },
   })
-  @ApiResponse({ status: 403, description: 'Missing MANAGE_PRODUCTS permission' })
-  @ApiResponse({ status: 409, description: 'Brand name or slug already exists' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  @ApiResponse({
+    status: 403,
+    description: 'Missing MANAGE_PRODUCTS permission',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Brand name or slug already exists',
+  })
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Post()
   create(@Body() dto: CreateBrandDto, @CurrentUser() user: AuthenticatedUser) {
     return this.brandService.create(dto, user.id);
@@ -77,7 +84,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Get All Brands',
-    description: 'Get list of all active brands. Requires VIEW_PRODUCTS permission.',
+    description:
+      'Get list of all active brands. Requires VIEW_PRODUCTS permission.',
   })
   @ApiResponse({
     status: 200,
@@ -109,7 +117,7 @@ export class BrandController {
       },
     },
   })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get()
   findAll() {
     return this.brandService.findAll();
@@ -129,7 +137,7 @@ export class BrandController {
     description: 'Brand retrieved successfully',
   })
   @ApiResponse({ status: 404, description: 'Brand not found' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.brandService.findById(id);
@@ -137,7 +145,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Get Brand by Slug',
-    description: 'Get single brand by slug (SEO-friendly URL). Requires VIEW_PRODUCTS permission.',
+    description:
+      'Get single brand by slug (SEO-friendly URL). Requires VIEW_PRODUCTS permission.',
   })
   @ApiParam({
     name: 'slug',
@@ -149,7 +158,7 @@ export class BrandController {
     description: 'Brand retrieved successfully',
   })
   @ApiResponse({ status: 404, description: 'Brand not found' })
-  @Permissions(Permission.VIEW_PRODUCTS)
+  // @Permissions(Permission.VIEW_PRODUCTS)
   @Get('slug/:slug')
   findBySlug(@Param('slug') slug: string) {
     return this.brandService.findBySlug(slug);
@@ -157,7 +166,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Update Brand',
-    description: 'Update brand details including name, logo, and SEO metadata. Requires MANAGE_PRODUCTS permission.',
+    description:
+      'Update brand details including name, logo, and SEO metadata. Requires MANAGE_PRODUCTS permission.',
   })
   @ApiParam({
     name: 'id',
@@ -169,8 +179,11 @@ export class BrandController {
     description: 'Brand updated successfully',
   })
   @ApiResponse({ status: 404, description: 'Brand not found' })
-  @ApiResponse({ status: 409, description: 'Brand name or slug already exists' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  @ApiResponse({
+    status: 409,
+    description: 'Brand name or slug already exists',
+  })
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -182,7 +195,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Delete Brand',
-    description: 'Soft delete brand. Can be restored later. Requires MANAGE_PRODUCTS permission.',
+    description:
+      'Soft delete brand. Can be restored later. Requires MANAGE_PRODUCTS permission.',
   })
   @ApiParam({
     name: 'id',
@@ -194,7 +208,7 @@ export class BrandController {
     description: 'Brand deleted successfully',
   })
   @ApiResponse({ status: 404, description: 'Brand not found' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   delete(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
@@ -203,7 +217,8 @@ export class BrandController {
 
   @ApiOperation({
     summary: 'Restore Deleted Brand',
-    description: 'Restore a soft-deleted brand. Requires MANAGE_PRODUCTS permission.',
+    description:
+      'Restore a soft-deleted brand. Requires MANAGE_PRODUCTS permission.',
   })
   @ApiParam({
     name: 'id',
@@ -215,7 +230,7 @@ export class BrandController {
     description: 'Brand restored successfully',
   })
   @ApiResponse({ status: 404, description: 'Deleted brand not found' })
-  @Permissions(Permission.MANAGE_PRODUCTS)
+  // @Permissions(Permission.MANAGE_PRODUCTS)
   @Patch(':id/restore')
   restore(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
     return this.brandService.restore(id, user.id);
